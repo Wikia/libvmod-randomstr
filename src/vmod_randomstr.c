@@ -1,5 +1,5 @@
 #include <stdlib.h>
-
+#include <string.h>
 #include <cache/cache.h>
 
 #include <vcc_if.h>
