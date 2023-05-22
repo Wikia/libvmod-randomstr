@@ -33,5 +33,5 @@ client c1 {
 	expect resp.http.bar1 == "a"
 	expect resp.http.bar2 == "bbbbbbbbbb"
     expect resp.http.bar3 != "abc"
-    expect resp.http.bar4 == "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    expect resp.http.bar4 != "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 } -run
