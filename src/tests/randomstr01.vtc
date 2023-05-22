@@ -1,4 +1,4 @@
-varnishtest "Test urlcode vmod"
+varnishtest "Test randomstr vmod"
 
 server s1 {
 	rxreq 
@@ -15,7 +15,7 @@ server s1 {
 } -start
 
 varnish v1 -vcl+backend {
-	import urlcode from "${vmod_topbuild}/src/.libs/libvmod_randomstr.so";
+	import randomstr from "${vmod_topbuild}/src/.libs/libvmod_randomstr.so";
 
 	sub vcl_backend_response {
 		set beresp.http.Bar1 = randomstr.randomstr(1, "a");
