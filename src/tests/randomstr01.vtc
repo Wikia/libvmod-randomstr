@@ -1,0 +1,33 @@
+varnishtest "Test urlcode vmod"
+
+server s1 {
+	rxreq 
+	txresp	-hdr "Foo1: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_~" \
+		-hdr "Foo2: `!@#$%^&*()+={}[]:;'\\|<>,?/ \"" \
+		-hdr "Foo3: hello" \
+		-hdr "Foo4: world" \
+		-hdr "Foo5: %2" \
+		-hdr "Foo6: %" \
+		-hdr "Foo7: +" \
+		-hdr "Foo8: \xf6\xff" \
+		-hdr "Connection: close" \
+		-body "Hi!\n"
+} -start
+
+varnish v1 -vcl+backend {
+	import urlcode from "${vmod_topbuild}/src/.libs/libvmod_randomstr.so";
+
+	sub vcl_backend_response {
+		set beresp.http.Bar1 = randomstr.randomstr(1, "a");
+        set beresp.http.Bar2 = randomstr.randomstr(10, "a");
+	}
+} -start
+
+client c1 {
+	txreq -url "/"
+	rxresp
+	expect resp.status == 200
+	expect resp.http.X-Varnish == "1001"
+	expect resp.http.bar1 == "a"
+	expect resp.http.bar2 == "aaaaaaaaaa"
+} -run

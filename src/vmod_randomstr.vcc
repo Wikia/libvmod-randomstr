@@ -1,0 +1,2 @@
+$Module randomstr 3 randomstr/randomstr functions vmod
+$Function STRING randomstr(INT n, STRING characters = "a-zA-Z0-9-_")
