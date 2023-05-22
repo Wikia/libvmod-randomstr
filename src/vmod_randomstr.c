@@ -29,7 +29,7 @@ vmod_event(VRT_CTX, struct vmod_priv *priv, enum vcl_event_e e)
     case VCL_EVENT_LOAD:
         unsigned long seed = mix(clock(), time(NULL), getpid());
         srand(seed);
-        break
+        break;
     default:
         break;
     }
