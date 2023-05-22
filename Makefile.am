@@ -1,18 +1,31 @@
-ACLOCAL_AMFLAGS = -I m4
+AM_CPPFLAGS = @VMOD_INCLUDES@
 
-SUBDIRS = src
+vmoddir = @VMOD_DIR@
+vmod_LTLIBRARIES = libvmod_randomstr.la
 
-EXTRA_DIST = README.rst
+libvmod_randomstr_la_LDFLAGS = -module -export-dynamic -avoid-version
 
-dist_man_MANS = vmod_randomstr.3
-MAINTAINERCLEANFILES = $(dist_man_MANS)
+libvmod_randomstr_la_SOURCES = vmod_randomstr.c
 
-vmod_randomstr.3: README.rst
-if HAVE_RST2MAN
-	${RST2MAN} README.rst $@
-else
-	@echo "========================================"
-	@echo "You need rst2man installed to make dist"
-	@echo "========================================"
-	@false
-endif
+nodist_libvmod_randomstr_la_SOURCES = \
+	vcc_if.c \
+	vcc_if.h
+
+vmod_randomstr.c: vcc_if.h
+
+vmod_selector.lo: $(nodist_libvmod_selector_la_SOURCES)
+
+vcc_if.h: vcc_if.c
+
+vcc_if.c: vmod_randomstr.vcc
+	@VMODTOOL@ $(top_srcdir)/src/vmod_randomstr.vcc
+
+check:
+	PATH=@LIBVARNISHAPI_SBINDIR@:$$PATH \
+	@VARNISHTEST@ -Dvmod_topbuild=$(abs_top_builddir) $(srcdir)/tests/*.vtc
+
+EXTRA_DIST = \
+	vmod_randomstr.vcc \
+	$(VMOD_TESTS)
+
+CLEANFILES = $(builddir)/vcc_if.c $(builddir)/vcc_if.h
