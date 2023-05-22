@@ -8,11 +8,15 @@ VCL_STRING
 vmod_randomstr(VRT_CTX, VCL_INT n, VCL_STRING seed)
 {
     char *p;
-    size_t len;
+    size_t len, seed_count;
     CHECK_OBJ_NOTNULL(ctx, VRT_CTX_MAGIC);
     CHECK_OBJ_NOTNULL(ctx->ws, WS_MAGIC);
 	if (seed == NULL)
 		return (NULL);
+
+    seed_count = strlen(seed);
+    if (seed_count == 0)
+        return (NULL);
 
     len = n;
 
@@ -22,7 +26,7 @@ vmod_randomstr(VRT_CTX, VCL_INT n, VCL_STRING seed)
 	}
     p = ctx->ws->f;
     while(n) {
-        p[len - n] = 'a';
+        p[len - n] = seed[rand() % seed_count];
         n--;
     }
     p[len] = '\0';

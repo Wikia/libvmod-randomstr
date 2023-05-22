@@ -19,7 +19,8 @@ varnish v1 -vcl+backend {
 
 	sub vcl_backend_response {
 		set beresp.http.Bar1 = randomstr.randomstr(1, "a");
-        set beresp.http.Bar2 = randomstr.randomstr(10, "a");
+        set beresp.http.Bar2 = randomstr.randomstr(10, "b");
+        set beresp.http.Bar3 = randomstr.randomstr(10, "ab");
 	}
 } -start
 
@@ -29,5 +30,6 @@ client c1 {
 	expect resp.status == 200
 	expect resp.http.X-Varnish == "1001"
 	expect resp.http.bar1 == "a"
-	expect resp.http.bar2 == "aaaaaaaaaa"
+	expect resp.http.bar2 == "bbbbbbbbbb"
+    expect resp.http.bar3 == "cde"
 } -run
