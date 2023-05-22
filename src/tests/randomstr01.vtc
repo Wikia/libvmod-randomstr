@@ -21,6 +21,7 @@ varnish v1 -vcl+backend {
 		set beresp.http.Bar1 = randomstr.randomstr(1, "a");
         set beresp.http.Bar2 = randomstr.randomstr(10, "b");
         set beresp.http.Bar3 = randomstr.randomstr(3, "ab");
+        set beresp.http.Bar4 = randomstr.randomstr(32);
 	}
 } -start
 
@@ -32,4 +33,5 @@ client c1 {
 	expect resp.http.bar1 == "a"
 	expect resp.http.bar2 == "bbbbbbbbbb"
     expect resp.http.bar3 != "abc"
+    expect resp.http.bar4 == "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 } -run
