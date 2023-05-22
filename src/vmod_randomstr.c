@@ -21,6 +21,6 @@ vmod_randomstr(VRT_CTX, VCL_INT n, VCL_STRING s2)
         n--;
     }
     p[len] = '\0';
-    WS_Release(ctx->ws, l + 1);
+    WS_Release(ctx->ws, len + 1);
     return (p);
 }
