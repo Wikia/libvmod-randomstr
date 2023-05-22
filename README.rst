@@ -89,6 +89,6 @@ COPYRIGHT
 =========
 
 This document is licensed under the same license as the
-libvmod-urlcode project. See LICENSE for details.
+libvmod-randomstr project. See LICENSE for details.
 
 * Copyright (c) 2023 Fandom Inc.
