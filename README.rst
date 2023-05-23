@@ -43,12 +43,12 @@ randomstr
 Prototype
         ::
 
-		 randomstr.randomst(STRING_LIST input)
+		 randomstr.randomst(INT, STRING)
 
 Return value
 	STRING
 Description
-	Returns a random string using characters a-zA-Z0-9-_.
+	Returns a random string using characters from a given character set (defeult set is a-zA-Z0-9-_).
 Example
 	::
 
