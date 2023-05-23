@@ -27,6 +27,8 @@ vmod_event(VRT_CTX, struct vmod_priv *priv, enum vcl_event_e e)
     (void)priv;
     switch (e) {
     case VCL_EVENT_LOAD:
+        // Initialize the random seed so we don't generate the same sequences.
+        // Based on https://stackoverflow.com/questions/322938/recommended-way-to-initialize-srand
         unsigned long seed = mix(clock(), time(NULL), getpid());
         srand(seed);
         break;
@@ -37,17 +39,17 @@ vmod_event(VRT_CTX, struct vmod_priv *priv, enum vcl_event_e e)
 }
 
 VCL_STRING
-vmod_randomstr(VRT_CTX, VCL_INT n, VCL_STRING seed)
+vmod_randomstr(VRT_CTX, VCL_INT n, VCL_STRING characterset)
 {
     char *p;
-    size_t len, seed_count;
+    size_t len, characterset_size;
     CHECK_OBJ_NOTNULL(ctx, VRT_CTX_MAGIC);
     CHECK_OBJ_NOTNULL(ctx->ws, WS_MAGIC);
-    if (seed == NULL)
+    if (characterset == NULL)
         return (NULL);
 
-    seed_count = strlen(seed);
-    if (seed_count == 0)
+    characterset_size = strlen(characterset);
+    if (characterset_size == 0)
         return (NULL);
 
     len = n;
@@ -58,7 +60,7 @@ vmod_randomstr(VRT_CTX, VCL_INT n, VCL_STRING seed)
     }
     p = ctx->ws->f;
     while(n) {
-        p[len - n] = seed[rand() % seed_count];
+        p[len - n] = characterset[rand() % characterset_size];
         n--;
     }
     p[len] = '\0';
